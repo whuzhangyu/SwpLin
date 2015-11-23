@@ -15,21 +15,22 @@ Sweepline Algorithm
 {
     // initialize event data structure - minimum priority queue
     // event queue EQ initially stores all the start and end points
-    // of all the line segments, and the endpoints are stored in the
+    // of all the input line segments, and the endpoints are stored in the
     // minimum priority queue according to their x coordinates
     EQ = Heapify(all segment endpoints);
 
-    // initialize sweep line SL to be empty
-    // SL is stored using a binary search tree
-    SL = BST.Build(Null);
+    // initialize sweep line data structure SL to be empty
+    // SL is stored using a binary search tree class
+    SL = new class BST(Null);
 
-    // initialize the output intersection list IL to be empty
-    IL = List.Build(Null);
+    // initialize the output intersection array list IL to be empty
+    IL = new class List(Null);
 
     while (EQ != Null)
     {
         // pop up the root of the EQ to get the next event
-        E = EQ.Pop();
+        // that's the left-most event point
+        E = EQ.PopRoot();
 
         // if E is the left endpoint of segment
         if (IsLeftEndPoint(E) == true)

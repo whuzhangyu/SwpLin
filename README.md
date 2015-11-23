@@ -1,0 +1,2 @@
+# SwpLin
+Segment Intersection Detection

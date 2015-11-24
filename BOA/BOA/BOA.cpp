@@ -29,8 +29,30 @@ Sweepline Algorithm
     // sweep line
     SL = new class BST(Null);
 
+    // initialize the upper and lower sentinel lines S1, S2
+    S1.LeftEndPoint.x = min(all x) - 1;
+    S1.LeftEndPoint.y = max(all y) + 1;
+    S1.RightEndPoint.x = max(all x) + 1;
+    S1.RightEndPoint.y = max(all y) + 1;
+    S2.LeftEndPoint.x = min(all x) - 1;
+    S2.LeftEndPoint.y = min(all y) - 1;
+    S2.RightEndPoint.x = max(all x) + 1;
+    S2.RightEndPoint.y = min(all y) - 1;
+
+    // initially SL contains only the upper and lower sentinel lines S1, S2
+    SL.Insert(S1);
+    SL.Insert(S2);
+
     // initialize the output intersection array list IL to be empty
     IL = new class List(Null);
+
+    // the equivalence class structure for trapezoids and triangles PG
+    // is a structure list, each node of PG consists one polygon ID and its
+    // parent's ID, when a new polygon is added into PG, initially the
+    // parent is itself
+    polygon = 1;
+    PG = new class Polygon(Null);
+    PG.Insert(polygon);
 
     while (EQ != Null)
     {
@@ -64,6 +86,11 @@ Sweepline Algorithm
                 // if intersected, add the intersection into EQ
                 EQ.Push(I);
             }
+            // each left endpoint adds 2 more polygons
+            PG.Insert(++polygon);
+            PG.Insert(++polygon);
+            // merge the polygon using Union/Find Algorithm
+            MergePolygon(PG);
         }
         // if E is the right endpoint of segment
         else if (IsRightEndPoint(E) == true)
@@ -88,6 +115,10 @@ Sweepline Algorithm
                     EQ.Push(I);
                 }
             }
+            // each right endpoint adds 1 more polygons
+            PG.Insert(++polygon);
+            // merge the polygon using Union/Find Algorithm
+            MergePolygon(PG);
         }
         // if E is an intersection event
         else
@@ -130,6 +161,13 @@ Sweepline Algorithm
                 }
             }
         }
+        // each intersection adds 3 more polygons
+        PG.Insert(++polygon);
+        PG.Insert(++polygon);
+        PG.Insert(++polygon);
+        // merge the polygon using Union/Find Algorithm
+        MergePolygon(PG);
+
         // now event E is processed, continue to the next event
     }
     // now all the events are processed,
